@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="semantic/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="semantic/semantic.min.js"></script>
+    <title>Vite App</title>
+</head>
+
+<body>
+    <div class="ui container" x-data="movies">
+        <h1 align="center" x-text="header"></h1>
+        <div class="ui horizontal divider"></div>
+
+        <div :class="`ui fluid icon input ${search.isLoading ? 'loading': ''}`">
+            <input x-model="search.text" @keyup="onSearch" type="search" placeholder="Search...">
+            <i class="search icon"></i>
+        </div>
+
+        <h4 class="ui horizontal divider header">
+            <i class="film icon"></i>
+            <span x-text="`${resultHeader == 'POPULAR' ? 'Popular Movies' : `Search Results for : ${search.text}`}`"></span>
+        </h4>
+
+        <div class="ui four column grid">
+            <br>
+            <div x-show="search.showErrorMessage" class="ui icon message">
+                <i class="notched circle loading icon"></i>
+                <div class="content">
+                    <div class="header">
+                        Are you sure you didn't make a typo today?
+                    </div>
+                    <p>No Movies found for <span x-text="search.text"></span> </p>
+                </div>
+            </div>
+            <template x-for="film in movies">
+            <div class="column">
+                <div class="ui fluid card">
+                    <div class="image">
+                        <img :src="`https://image.tmdb.org/t/p/w500${film.poster_path ? film.poster_path : '/aXBQD515okXQZmYA89ntXMvSJSd.jpg'}`">
+                    </div>
+                    <div class="content">
+                        <div x-text="film.title" class="header">Movie Tittle</div>
+                        <div class="meta">
+                            <a x-text="film.release_date">Friends</a>
+                        </div>
+                        <div class="description">
+                            Matthew is an interior designer living in New York.
+                        </div>
+                    </div>
+                    <div class="extra content">
+                        <span class="right floated">
+                            Joined in 2013
+                        </span>
+                        <span>
+                            <i class="user icon"></i>
+                            75 Friends
+                        </span>
+                    </div>
+                </div>
+            </div>
+            </template>
+        </div>
+    </div>
+    <script type="module" src="/main.js"></script>
+</body>
+
+</html>
+
+
+<!-- adult: false
+backdrop_path: "/qwK9soQmmJ7kRdjLZVXblw3g7AQ.jpg"
+genre_ids: (3) [28, 12, 53]
+id: 7451
+original_language: "en"
+original_title: "xXx"
+overview: "Xander Cage is your standard adrenaline junkie with no fear and a lousy attitude. When the US Government
+\"recruits\" him to go on a mission, he's not exactly thrilled. His mission: to gather information on an organization
+that may just be planning the destruction of the world, led by the nihilistic Yorgi."
+popularity: 42.995
+poster_path: "/86BnliVDBo2TjKmrgQTJIPHxAKd.jpg"
+release_date: "2002-08-09"
+title: "xXx"
+video: false
+vote_average: 5.9
+vote_count: 3486 -->
+
+<!-- Posts with comments -->
+
+<!-- <div class="ui card">
+                <div class="content">
+                    <div class="right floated meta">14h</div>
+                    <img class="ui avatar image" src="https://semantic-ui.com/images/avatar/large/elliot.jpg"> Elliot
+                </div>
+                <div class="image">
+                    <img class="ui image" src="https://semantic-ui.com/images/avatar/large/elliot.jpg">
+
+                </div>
+                <div class="content">
+                    <span class="right floated">
+                        <i class="heart outline like icon"></i>
+                        17 likes
+                    </span>
+                    <i class="comment icon"></i>
+                    3 comments
+                </div>
+                <div class="extra content">
+                    <div class="ui large transparent left icon input">
+                        <i class="heart outline icon"></i>
+                        <input type="text" placeholder="Add Comment...">
+                    </div>
+                </div>
+            </div> -->
