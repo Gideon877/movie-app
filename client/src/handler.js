@@ -1,11 +1,26 @@
+import { queryForDetails } from './constants';
+
 export default () => {
 
     return {
-        add(_movie) {
-            console.table(_movie, '\n\n add')
-         },
-        info(_movie) {
-            console.table(_movie, '\n\n info')
-         },
+        selectedFilm: {},
+        add(id) {
+            console.log(id, '\n\n add')
+        },
+        info(id) {
+            this.getMovieById(id)
+            console.table(this.selectedFilm, '\n\n info')
+            $('.ui.modal')
+                .modal('show')
+                ;
+        },
+
+        getMovieById(id) {
+            const url = queryForDetails(id);
+            fetch(url)
+                .then(res => res.json())
+                .then(data => this.selectedFilm = data)
+                .catch(err => console.error(err))
+        },
     }
 }

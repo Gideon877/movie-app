@@ -32,22 +32,24 @@ export default () => {
                 : this.id = this.id.filter(_id => _id != id)
 
             this.getMovies(POPULAR_URL)
-            console.log(this.id.length)
         },
         init() {
+            this.loading = true
             setInterval(() => {
                 this.time = moment().format('MMMM Do YYYY, h:mm:ss a');
-                this.count++;
+                this.count++;                
             }, 1000);
 
-            // console.log(this.isLoggedIn)
+            setTimeout(() => {
+                this.user = auth.getUser();
+                this.getMovies(POPULAR_URL);
+                this.loading = false;
+            }, 900)
             // setTimeout(()=> this.signIn(), 2000)
             // console.log(this.isLoggedIn)
 
 
 
-            this.user = auth.getUser();
-            this.getMovies(POPULAR_URL);
 
         },
         searchUrl() {
@@ -78,9 +80,6 @@ export default () => {
                             liked: this.id.includes(film.id)
                         }));
                     
-                        console.log(this.movies[1])
-
-
                     this.search.showErrorMessage = _.isEmpty(this.movies);
                 })
                 .catch(err => console.error(err));

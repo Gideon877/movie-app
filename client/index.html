@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
     <!-- Site Properties -->
-    <title>Grid Example - Semantic</title>
+    <title>Dintshwantsho</title>
     <link rel="stylesheet" type="text/css" href="./semantic/semantic.min.css">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
@@ -84,14 +84,14 @@
                 </div>
             </div>
 
-            <div class="ui text container search">
+            <div x-show="isLoggedIn" class="ui text container search">
                 <div :class="`ui fluid icon input ${search.isLoading ? 'loading': ''}`">
                     <input x-model="search.text" @keyup="onSearch" type="search" placeholder="Search...">
                     <i class="search icon"></i>
                 </div>
             </div>
 
-            <h2 class="ui center aligned icon header">
+            <h2 x-show="isLoggedIn" class="ui center aligned icon header">
                 <i class="circular film icon"></i>
                 <span
                     x-text="`${resultHeader == 'POPULAR' ? 'Popular Movies' : `Search Results for : ${search.text}`}`"></span>
@@ -102,7 +102,7 @@
 
 
         <!-- Search result card display -->
-        <div class="ui vertical stripe segment" x-show="isLoggedIn">
+        <div :class="`ui vertical ${loading ? 'loading' : ''} right aligned segment`" x-show="isLoggedIn">
 
             <div class="ui link cards" style="padding: 2em;">
                 <div x-show="search.showErrorMessage" class="ui icon message">
@@ -118,7 +118,8 @@
                     <!-- <div class="column"> -->
                     <div class="right teal card">
                         <div class="ui image">
-                            <a :class="`ui ${film.original_language == 'en' ? 'blue' : (film.original_language == 'fr') ? 'orange' : 'red'} ribbon label`" x-text="film.original_language"></a>
+                            <a :class="`ui ${film.original_language == 'en' ? 'blue' : (film.original_language == 'fr') ? 'orange' : 'red'} ribbon label`"
+                                x-text="film.original_language"></a>
                             <img
                                 :src="`https://image.tmdb.org/t/p/w500${film.poster_path ? film.poster_path : '/aXBQD515okXQZmYA89ntXMvSJSd.jpg'}`">
                         </div>
@@ -140,15 +141,15 @@
                             </span>
                             <span class="right floated star">
                                 <div class="mini ui buttons">
-                                    <button @click="info(film)" class="circular ui icon button">
+                                    <button @click="info(film.id)" class="circular ui icon button">
                                         <i class="icon info"></i>
                                     </button>
-                                    <button @click="add(film)" class="circular ui icon button">
+                                    <button @click="add(film.id)" class="circular ui icon button">
                                         <i class="icon list"></i>
                                     </button>
                                     <button class="circular ui icon button">
                                         <i :class="`${film.liked ? 'red' : ''} heart icon`"
-                                        @click="favorite(film.id)"></i>
+                                            @click="favorite(film.id)"></i>
                                     </button>
                                 </div>
                             </span>
@@ -156,6 +157,122 @@
                     </div>
                     <!-- </div> -->
                 </template>
+            </div>
+
+
+            <!-- Modal -->
+            <div class="ui modal">
+                <i class="close icon"></i>
+                <div x-text="selectedFilm.title" class="header">
+                    Profile Picture
+                </div>
+                <div class="image content">
+                    <div class="ui medium image">
+                        <img
+                            :src="`https://image.tmdb.org/t/p/w500${selectedFilm.poster_path ? selectedFilm.poster_path : '/aXBQD515okXQZmYA89ntXMvSJSd.jpg'}`">
+                    </div>
+                    <div class="description">
+                        <h4 class="ui header">Overview</h4>
+                        <p x-text="selectedFilm.overview">We've grabbed the following image from the <a
+                                href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with your
+                            registered e-mail address.</p>
+                        <p></p>
+                    </div>
+                </div>
+
+                <!-- Movie comments -->>
+                <div class="content" x-show="false">
+                    <div class="ui small comments">
+                        <h3 class="ui dividing header">Comments</h3>
+                        <div class="comment">
+                            <a class="avatar">
+                                <img src="https://semantic-ui.com/images/avatar/small/matt.jpg">
+                            </a>
+                            <div class="content">
+                                <a class="author">Matt</a>
+                                <div class="metadata">
+                                    <span class="date">Today at 5:42PM</span>
+                                </div>
+                                <div class="text">
+                                    How artistic!
+                                </div>
+                                <div class="actions">
+                                    <a class="reply">Reply</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment">
+                            <a class="avatar">
+                                <img src="https://semantic-ui.com/images/avatar/small/elliot.jpg">
+                            </a>
+                            <div class="content">
+                                <a class="author">Elliot Fu</a>
+                                <div class="metadata">
+                                    <span class="date">Yesterday at 12:30AM</span>
+                                </div>
+                                <div class="text">
+                                    <p>This has been very useful for my research. Thanks as well!</p>
+                                </div>
+                                <div class="actions">
+                                    <a class="reply">Reply</a>
+                                </div>
+                            </div>
+                            <div class="comments">
+                                <div class="comment">
+                                    <a class="avatar">
+                                        <img src="https://semantic-ui.com/images/avatar/small/jenny.jpg">
+                                    </a>
+                                    <div class="content">
+                                        <a class="author">Jenny Hess</a>
+                                        <div class="metadata">
+                                            <span class="date">Just now</span>
+                                        </div>
+                                        <div class="text">
+                                            Elliot you are always so right :)
+                                        </div>
+                                        <div class="actions">
+                                            <a class="reply">Reply</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment">
+                            <a class="avatar">
+                                <img src="https://semantic-ui.com/images/avatar/small/joe.jpg">
+                            </a>
+                            <div class="content">
+                                <a class="author">Joe Henderson</a>
+                                <div class="metadata">
+                                    <span class="date">5 days ago</span>
+                                </div>
+                                <div class="text">
+                                    Dude, this is awesome. Thanks so much
+                                </div>
+                                <div class="actions">
+                                    <a class="reply">Reply</a>
+                                </div>
+                            </div>
+                        </div>
+                        <form class="ui reply form">
+                            <div class="field">
+                                <textarea></textarea>
+                            </div>
+                            <div class="ui blue labeled submit icon button">
+                                <i class="icon edit"></i> Add Reply
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="actions">
+                    <div class="ui black deny button">
+                        Nope
+                    </div>
+                    <div @click="favorite(selectedFilm.id)" class="ui positive right labeled icon button">
+                        Yep, I like this.
+                        <i class="checkmark icon"></i>
+                    </div>
+                </div>
             </div>
         </div>
 

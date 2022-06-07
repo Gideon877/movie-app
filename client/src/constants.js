@@ -5,6 +5,13 @@ const SearchState = {
     Search: 'SEARCH',
 }
 
+/** 
+ *  https://api.themoviedb.org/3/movie/338953?api_key=7e719bfe3cd3786ebf0a05d3b138853d
+ *  &append_to_response=videos
+*/
+
+const queryForDetails = (id) => `https://api.themoviedb.org/3/movie/${id}?api_key=7e719bfe3cd3786ebf0a05d3b138853d&append_to_response=videos`
+
 const Pages = {
     HOME: 'HOME',
     Playlist: 'PLAYLIST',
@@ -27,5 +34,5 @@ class User {
 
 
 export {
-    URL, POPULAR_URL, SearchState, Pages, User
+    URL, POPULAR_URL, SearchState, Pages, User, queryForDetails
 }
