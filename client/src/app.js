@@ -4,6 +4,10 @@ import Auth from './auth.js';
 import { POPULAR_URL, SearchState, URL } from './constants';
 const auth = Auth();
 
+import Quotes from './quotes.js';
+const quotes = Quotes();
+
+
 export default () => {
 
     return {
@@ -13,7 +17,7 @@ export default () => {
         header: 'Dintshwantsho',
         search: {
             isLoading: false,
-            text: ' ',
+            text: '',
             showErrorMessage: false
         },
         movies: [],
@@ -21,15 +25,21 @@ export default () => {
         pages: 0,
         results: 0,
         resultHeader: SearchState.Popular,
+        screenQuotes: {},
         init() {
-            
+
+            quotes.getQuote();
+            this.screenQuotes = quotes;
             setInterval(() => {
                 this.time = moment().format('MMMM Do YYYY, h:mm:ss a');
                 this.count++;
             }, 1000);
+            console.log(this.$refs)
+
 
             this.user = auth.getUser();
             this.getMovies(POPULAR_URL);
+            console.log(this.page, this.pages)
 
         },
         searchUrl() {
@@ -38,7 +48,7 @@ export default () => {
         onSearch() {
             this.search.isLoading = true;
             _.isEmpty(this.search.text) ? this.getMovies(POPULAR_URL) : this.getMovies(this.searchUrl());
-            console.log('typing...', this.search.text == '');
+            // console.log('typing...', _.size(this.search.text));
         },
         getMovies(url) {
             if (url == POPULAR_URL) {
@@ -53,10 +63,10 @@ export default () => {
                     this.page = data.page;
                     this.pages = data.total_pages;
                     this.results = data.total_results;
-                    this.movies = data.results
+                    this.movies =  _.sortBy(data.results, ['title', ['asc']])
                         .map(film => ({
                             ...film,
-                            // release_date: moment(film.release).fromNow()
+                            release_date: moment(film.release_date).fromNow()
                         }));
 
                     this.search.showErrorMessage = _.isEmpty(this.movies);
