@@ -5,16 +5,17 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" href="semantic/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="./semantic/semantic.min.css">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-    <script src="semantic/semantic.min.js"></script>
+    <script src="./semantic/semantic.min.js"></script>
     <title>Vite App</title>
 </head>
 
 <body>
     <div class="ui container" x-data="movies">
         <h1 align="center" x-text="header"></h1>
+        <b x-text="time"></b>
         <div class="ui horizontal divider"></div>
 
         <div :class="`ui fluid icon input ${search.isLoading ? 'loading': ''}`">
@@ -27,8 +28,7 @@
             <span x-text="`${resultHeader == 'POPULAR' ? 'Popular Movies' : `Search Results for : ${search.text}`}`"></span>
         </h4>
 
-        <div class="ui four column grid">
-            <br>
+        <div class="ui link cards">
             <div x-show="search.showErrorMessage" class="ui icon message">
                 <i class="notched circle loading icon"></i>
                 <div class="content">
@@ -39,8 +39,8 @@
                 </div>
             </div>
             <template x-for="film in movies">
-            <div class="column">
-                <div class="ui fluid card">
+            <!-- <div class="column"> -->
+                <div class="teal card">
                     <div class="image">
                         <img :src="`https://image.tmdb.org/t/p/w500${film.poster_path ? film.poster_path : '/aXBQD515okXQZmYA89ntXMvSJSd.jpg'}`">
                     </div>
@@ -49,11 +49,11 @@
                         <div class="meta">
                             <a x-text="film.release_date">Friends</a>
                         </div>
-                        <div class="description">
+                        <!-- <div class="description">
                             Matthew is an interior designer living in New York.
-                        </div>
+                        </div> -->
                     </div>
-                    <div class="extra content">
+                    <!-- <div class="extra content">
                         <span class="right floated">
                             Joined in 2013
                         </span>
@@ -61,9 +61,9 @@
                             <i class="user icon"></i>
                             75 Friends
                         </span>
-                    </div>
+                    </div> -->
                 </div>
-            </div>
+            <!-- </div> -->
             </template>
         </div>
     </div>
