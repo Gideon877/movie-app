@@ -1,7 +1,7 @@
 export default () => {
 
     return {
-        isLoggedIn: false,
+        isLoggedIn: true,
         token: null,
         user: null,
         loading: false,

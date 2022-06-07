@@ -30,11 +30,14 @@
     <!-- Following Menu -->
     <div class="ui large top fixed hidden menu">
         <div class="ui container">
-            <a class="active item">Homes</a>
-            <a class="item">Playlist</a>
-            <a class="item">About</a>
-            <a class="item">Profile</a>
-            <div class="right menu">
+            <a class="active item">Home</a>
+            <a x-show="isLoggedIn" class="item">Playlist</a>
+            <a x-show="isLoggedIn" class="item">About</a>
+            <a x-show="isLoggedIn" class="item">Profile</a>
+            <div x-show="isLoggedIn" class="right item">
+                <a @click="signOut" class="ui button">Logout</a>
+            </div>
+            <div x-show="!isLoggedIn" class="right menu">
                 <div class="item">
                     <a class="ui button">Log in</a>
                 </div>
@@ -48,16 +51,18 @@
     <!-- Sidebar Menu -->
     <div class="ui vertical inverted sidebar menu">
         <a class="active item">Home</a>
-        <a class="item">Playlist</a>
-        <a class="item">About</a>
-        <a class="item">Profile</a>
-        <a class="item">Login</a>
-        <a class="item">Signup</a>
+        <a x-show="isLoggedIn" class="item">Playlist</a>
+        <a x-show="isLoggedIn" class="item">About</a>
+        <a x-show="isLoggedIn" class="item">Profile</a>
+        <a x-show="isLoggedIn" class="item">Logout</a>
+        <a x-show="!isLoggedIn" class="item">Login</a>
+        <a x-show="!isLoggedIn" class="item">Signup</a>
     </div>
 
 
     <!-- Page Contents -->
     <div class="pusher">
+        <!-- Page header with search -->
         <div class="ui inverted vertical masthead center aligned segment">
 
             <div class="ui container">
@@ -66,27 +71,18 @@
                         <i class="sidebar icon"></i>
                     </a>
                     <a class="active item">Home</a>
-                    <a class="item">Playlist</a>
-                    <a class="item">About</a>
-                    <a class="item">Profile</a>
-                    <div class="right item">
+                    <a x-show="isLoggedIn" class="item">Playlist</a>
+                    <a x-show="isLoggedIn" class="item">About</a>
+                    <a x-show="isLoggedIn" class="item">Profile</a>
+                    <div x-show="isLoggedIn" class="right item">
+                        <a @click="signOut" class="ui inverted button">Logout</a>
+                    </div>
+                    <div x-show="!isLoggedIn" class="right item">
                         <a class="ui inverted button">Log in</a>
                         <a class="ui inverted button">Sign Up</a>
                     </div>
                 </div>
             </div>
-
-            <!-- <div class="ui text container">
-                <h1 class="ui inverted header">
-                    Dintshwantsho
-                </h1>
-
-                <div>
-                    <span x-text="screenQuotes.quote.quote"></span>
-                    <br>
-                    <strong x-text="`- ${screenQuotes.quote.author}`"></strong>
-                </div>
-            </div> -->
 
             <div class="ui text container search">
                 <div :class="`ui fluid icon input ${search.isLoading ? 'loading': ''}`">
@@ -103,7 +99,10 @@
             </h2>
 
         </div>
-        <div class="ui vertical stripe segment">
+
+
+        <!-- Search result card display -->
+        <div class="ui vertical stripe segment" x-show="isLoggedIn">
 
             <div class="ui link cards" style="padding: 2em;">
                 <div x-show="search.showErrorMessage" class="ui icon message">
@@ -119,6 +118,7 @@
                     <!-- <div class="column"> -->
                     <div class="right teal card">
                         <div class="ui image">
+                            <a :class="`ui ${film.original_language == 'en' ? 'blue' : (film.original_language == 'fr') ? 'orange' : 'red'} ribbon label`" x-text="film.original_language"></a>
                             <img
                                 :src="`https://image.tmdb.org/t/p/w500${film.poster_path ? film.poster_path : '/aXBQD515okXQZmYA89ntXMvSJSd.jpg'}`">
                         </div>
@@ -131,20 +131,36 @@
                                 Matthew is an interior designer living in New York.
                             </div> -->
                         </div>
-                        <!-- <div class="extra content">
-                            <span class="right floated">
-                                Joined in 2013
+                        <div class="extra content">
+                            <span class="left floated like">
+                                <p>
+                                    <i class="active star icon"></i>
+                                    <b x-text="film.vote_average">5</b>
+                                </p>
                             </span>
-                            <span>
-                                <i class="user icon"></i>
-                                75 Friends
+                            <span class="right floated star">
+                                <div class="mini ui buttons">
+                                    <button @click="info(film)" class="circular ui icon button">
+                                        <i class="icon info"></i>
+                                    </button>
+                                    <button @click="add(film)" class="circular ui icon button">
+                                        <i class="icon list"></i>
+                                    </button>
+                                    <button class="circular ui icon button">
+                                        <i :class="`${film.liked ? 'red' : ''} heart icon`"
+                                        @click="favorite(film.id)"></i>
+                                    </button>
+                                </div>
                             </span>
-                        </div> -->
+                        </div>
                     </div>
                     <!-- </div> -->
                 </template>
             </div>
         </div>
+
+
+
 
         <div class="ui inverted vertical footer segment">
             <div class="ui container">
@@ -181,3 +197,15 @@
 </body>
 
 </html>
+
+<!-- id: 864116
+original_language: "en"
+original_title: "A Day to Die"
+overview: "A disgraced parole officer is indebted to a local gang leader and forced to pull off a series of dangerous drug heists within twelve hours in order to pay the $2 million dollars he owes, rescue his kidnapped pregnant wife, and settle a score with the city's corrupt police chief, who is working with the gang leader and double-crossed him years ago."
+popularity: 1791.272
+poster_path: "/8Kce1utfytAG5m1PbtVoDzmDZJH.jpg"
+release_date: "3 months ago"
+title: "A Day to Die"
+video: false
+vote_average: 6.1
+vote_count: 47 -->

@@ -1,16 +1,16 @@
 import _ from 'lodash'
 import moment from 'moment';
 import Auth from './auth.js';
+import Handler from './handler.js';
 import { POPULAR_URL, SearchState, URL } from './constants';
 const auth = Auth();
 
-import Quotes from './quotes.js';
-const quotes = Quotes();
 
 
 export default () => {
-
     return {
+        ...auth,
+        ...Handler(),
         token: Alpine.$persist(0),
         time: Alpine.$persist(0),
         user: {},
@@ -25,21 +25,29 @@ export default () => {
         pages: 0,
         results: 0,
         resultHeader: SearchState.Popular,
-        screenQuotes: {},
-        init() {
+        id: Alpine.$persist([]),
+        favorite(id){
+            (!this.id.includes(id)) 
+                ? this.id.push(id)
+                : this.id = this.id.filter(_id => _id != id)
 
-            quotes.getQuote();
-            this.screenQuotes = quotes;
+            this.getMovies(POPULAR_URL)
+            console.log(this.id.length)
+        },
+        init() {
             setInterval(() => {
                 this.time = moment().format('MMMM Do YYYY, h:mm:ss a');
                 this.count++;
             }, 1000);
-            console.log(this.$refs)
+
+            // console.log(this.isLoggedIn)
+            // setTimeout(()=> this.signIn(), 2000)
+            // console.log(this.isLoggedIn)
+
 
 
             this.user = auth.getUser();
             this.getMovies(POPULAR_URL);
-            console.log(this.page, this.pages)
 
         },
         searchUrl() {
@@ -66,8 +74,12 @@ export default () => {
                     this.movies =  _.sortBy(data.results, ['title', ['asc']])
                         .map(film => ({
                             ...film,
-                            release_date: moment(film.release_date).fromNow()
+                            release_date: moment(film.release_date).fromNow(),
+                            liked: this.id.includes(film.id)
                         }));
+                    
+                        console.log(this.movies[1])
+
 
                     this.search.showErrorMessage = _.isEmpty(this.movies);
                 })
