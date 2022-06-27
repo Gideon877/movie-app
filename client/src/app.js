@@ -61,6 +61,7 @@ export default () => {
             // console.log('typing...', _.size(this.search.text));
         },
         getMovies(url) {
+            console.log(url);
             if (url == POPULAR_URL) {
                 this.resultHeader = SearchState.Popular
             } else {
