@@ -1,18 +1,30 @@
-const mongoose = require('mongoose');
-const graphqlSchema = require('./src/graphql/schema');
-const graphqlResolvers = require('./src/graphql/resolvers');
-const { ApolloServer } = require('apollo-server');
-const isAuth = require('./src/middleware/is-auth')
+require('dotenv').config()
+const express = require('express');
+const cors = require('cors');
+const PgPromise = require("pg-promise")
 
-const app = new ApolloServer({
-    typeDefs: graphqlSchema,
-    resolvers: graphqlResolvers,
-    context: isAuth
+const API = require('./src/api');
+const app = express();
+// enable the static folder...
+app.use(express.static('public'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cors())
+const DATABASE_URL = process.env.DATABASE_URL;
+
+const pgp = PgPromise({});
+const db = pgp({
+    connectionString: DATABASE_URL,
+    max: 30,
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 
-const mongoURL = (process.env.NODE_ENV === 'development') ? process.env.MONGO_DB_LOCAL_URL : process.env.MONGO_DB_URL
+API(app, db);
 
-mongoose
-    .connect(mongoURL, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => { app.listen(process.env.PORT, () => console.log(`🚀App running on http://localhost:${process.env.PORT}`)) })
-    .catch(err => console.log(err))
+const PORT = process.env.PORT || 4017;
+
+app.listen(PORT, function () {
+    console.log(`App started on http://localhost:${PORT}`);
+});

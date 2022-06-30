@@ -13,7 +13,10 @@ export default () => {
         ...Handler(),
         token: Alpine.$persist(0),
         time: Alpine.$persist(0),
-        user: {},
+        user: {
+            username: 'gideon877',
+            password: 'password'
+        },
         header: 'Dintshwantsho',
         search: {
             isLoading: false,
@@ -21,6 +24,7 @@ export default () => {
             showErrorMessage: false
         },
         movies: [],
+        playlist: [],
         page: 0,
         pages: 0,
         results: 0,

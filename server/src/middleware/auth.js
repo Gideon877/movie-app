@@ -1,8 +1,4 @@
 const jwt = require('jsonwebtoken');
-const { ApolloServer, gql } = require("apollo-server");
-const { PubSub } = require('graphql-subscriptions');
-
-const pubsub = new PubSub();
 
 
 class AuthorizationError extends Error {
@@ -18,7 +14,7 @@ class Authenticated {
         this.message = message;
         this.isAuth = (this.user) ? true : false;
         this.code = (this.isAuth) ? 200 : 404;
-        this.pubsub = pubsub;
+        // this.pubsub = pubsub;
     }
 }
 
@@ -46,3 +42,17 @@ module.exports = ({ req, res }) => {
     }
 
 }
+
+// try {
+//     const token =
+//         req.body.token || req.query.token || req.headers["x-access-token"];
+//     if (!token) {
+//         return res.status(403).send("A token is required for authentication");
+//     }
+//     const decoded = jwt.verify(token, 'secret');
+//     req.user = decoded;
+// } catch (err) {
+//     console.log(err);
+//     return res.status(401).send("Invalid Token");
+// }
+// return next();

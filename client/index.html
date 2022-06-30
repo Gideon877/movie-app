@@ -39,7 +39,7 @@
             </div>
             <div x-show="!isLoggedIn" class="right menu">
                 <div class="item">
-                    <a class="ui button">Log in</a>
+                    <a @click="signIn()" class="ui button">Log in</a>
                 </div>
                 <div class="item">
                     <a class="ui primary button">Sign Up</a>
@@ -55,7 +55,7 @@
         <a x-show="isLoggedIn" class="item">About</a>
         <a x-show="isLoggedIn" class="item">Profile</a>
         <a x-show="isLoggedIn" class="item">Logout</a>
-        <a x-show="!isLoggedIn" class="item">Login</a>
+        <a x-show="!isLoggedIn" @click="signIn()" class="item">Login</a>
         <a x-show="!isLoggedIn" class="item">Signup</a>
     </div>
 
@@ -78,7 +78,7 @@
                         <a @click="signOut" class="ui inverted button">Logout</a>
                     </div>
                     <div x-show="!isLoggedIn" class="right item">
-                        <a class="ui inverted button">Log in</a>
+                        <a @click="signIn()" :class="loading ? 'ui inverted loading button' : 'ui inverted button'">Log in</a>
                         <a class="ui inverted button">Sign Up</a>
                     </div>
                 </div>
@@ -114,6 +114,13 @@
                         <p>No Movies found for <span x-text="search.text"></span> </p>
                     </div>
                 </div>
+                <span>
+                    <template x-for="film in playlist">
+                        <div>
+                            <li x-text="film.title"></li>
+                        </div>
+                    </template>
+                </span>
                 <template x-for="film in movies">
                     <!-- <div class="column"> -->
                     <div class="right teal card">
