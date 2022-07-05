@@ -67,9 +67,6 @@ module.exports = async (app, db) => {
             const user = await fn.getUserById(userId);
             const movies = await fn.getUserMovies(userId);
 
-            console.log(user, movies);
-
-
             res.status(200).json({
                 ...user,
                 movies

@@ -32,6 +32,7 @@ export default () => {
         signIn() {
             this.loading = true;
             this.getUser()
+            console.log(this.user);
             axios
                 .post('http://localhost:4017/v1/signIn', {
                     username: 'gideon877',

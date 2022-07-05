@@ -78,7 +78,8 @@
                         <a @click="signOut" class="ui inverted button">Logout</a>
                     </div>
                     <div x-show="!isLoggedIn" class="right item">
-                        <a @click="signIn()" :class="loading ? 'ui inverted loading button' : 'ui inverted button'">Log in</a>
+                        <a @click="signIn()" :class="loading ? 'ui inverted loading button' : 'ui inverted button'">Log
+                            in</a>
                         <a class="ui inverted button">Sign Up</a>
                     </div>
                 </div>
@@ -284,6 +285,55 @@
         </div>
 
 
+        <div x-show="!isLoggedIn">
+            <br>
+            <h2 class="ui center aligned icon header">
+                <i class="circular film icon"></i>
+                <span x-text="'Login and SignUp Screen'"></span>
+                <div class="ui label red" x-text=""></div>
+            </h2>
+
+
+            <div class="ui form container">
+                <div class="two fields">
+                    <div class="field">
+                        <label>First Name</label>
+                        <input x-model="user.firstName" type="text">
+                    </div>
+                    <div class="field">
+                        <label>Last Name</label>
+                        <input x-model="user.lastName" type="text">
+                    </div>
+                </div>
+                <div class="two fields">
+                    <div class="field">
+                        <label>Username</label>
+                        <input x-model="user.username" type="text">
+                    </div>
+                    <div class="field">
+                        <label>Password</label>
+                        <input type="password" x-model="user.password">
+                    </div>
+                </div>
+
+                <div class="ui buttons">
+                    <button class="ui labeled icon green button">
+                        <i class="sign-in icon"></i>
+                        SignUp
+                    </button>
+                    <button class="ui right labeled icon blue button">
+                        <i class="sign-out arrow icon"></i>
+                        Login
+                    </button>
+                </div>
+                <div class="ui error message"></div>
+                <br>
+                <br>
+                <br>
+                <br>
+                
+            </div>
+        </div>
 
 
         <div class="ui inverted vertical footer segment">

@@ -3,6 +3,19 @@ const axios = require('axios');
 
 module.exports = async (db) => {
 
+
+    (async () => {
+        axios
+        .get('https://api.themoviedb.org/3/search/movie?api_key=7e719bfe3cd3786ebf0a05d3b138853d&query=xxx')
+        .then(r => {
+            // console.log(r)
+            return r.data.total_pages
+        }).then(data => {``
+            console.log(data)
+        })
+        .catch(e => console.log(e))
+    })()
+
     async function isAdded({ movieId, userId }) {
         try {
             const movie = await db.oneOrNone('select * from user_movies where user_id = $1 and movie_id = $2', [userId, movieId])
