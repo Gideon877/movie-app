@@ -13,10 +13,6 @@ export default () => {
         ...Handler(),
         token: Alpine.$persist(0),
         time: Alpine.$persist(0),
-        user: {
-            username: 'gideon877',
-            password: 'password'
-        },
         header: 'Dintshwantsho',
         search: {
             isLoading: false,

@@ -16,7 +16,13 @@ export default () => {
         isLoggedIn: false,
         token: null,
         loading: false,
+        user: {
+            username: 'gideon877',
+            password: 'password'
+        },
         getUser() {
+            console.log(this.user, ' user');
+            
             return {
                 ...this.user,
                 token: this.token,
@@ -25,6 +31,7 @@ export default () => {
         },
         signIn() {
             this.loading = true;
+            this.getUser()
             axios
                 .post('http://localhost:4017/v1/signIn', {
                     username: 'gideon877',
@@ -35,9 +42,7 @@ export default () => {
                     const { movies, user, token } = data;
                     this.loading = false;
                     this.isLoggedIn = true;
-                    this.playlist = movies;
-
-                    console.log({ movies, user, token });
+                    [this.user, this.playlist, this.token] = [user, movies, token];
                 })
                 .catch(e => console.log({ e }))
 

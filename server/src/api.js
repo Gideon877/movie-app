@@ -26,7 +26,7 @@ module.exports = async (app, db) => {
             });
 
         } catch (error) {
-            console.error(error.message);
+            console.log(error.message);
             res.status(500).json({
                 status: 'failed',
                 error: error.stack
