@@ -46,9 +46,10 @@ export default () => {
                 this.loading = false;
             }, 900)
             // setTimeout(()=> this.signIn(), 2000)
-            // console.log(this.isLoggedIn)
 
-
+            if(this.token !== 0 && this.token !== null) {
+                this.isLoggedIn = true;
+            }
 
 
         },

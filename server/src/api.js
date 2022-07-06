@@ -38,26 +38,31 @@ module.exports = async (app, db) => {
         try {
             const { username, password } = req.body;
             const user = await await fn.getUser(username);
-            
-            if (username && user.username) {
-                const isEqual = await bcrypt.compare(password, user.password);
-                if (!isEqual) {
-                    throw new Error('Password is incorrect!');
-                }
-                const token = jwt.sign({ username }, 'secret', { expiresIn: '5h' });
 
-                res.status(200).json({
-                    token,
-                    user,
-                    movies: await fn.getUserMovies(user.id)
-                })
-
-            } else {
-                res.status(500).json({ error: `Incorrect username!` })
+            if (!user) {
+                throw new Error('Incorrect username or password!');
             }
+
+            const isEqual = await bcrypt.compare(password, user.password);
+            
+            if (!isEqual) {
+                throw new Error('Incorrect username or password!');
+            }
+
+            const token = jwt.sign({ username }, 'secret', { expiresIn: '5h' });
+
+            res.status(200).json({
+                token,
+                user,
+                movies: await fn.getUserMovies(user.id)
+            })
+
+
         } catch (error) {
-            console.error(error)
-            res.status(500).json(error)
+            console.error(error.message)
+            res.status(500).json({
+                message: error.message
+            })
         }
     });
 

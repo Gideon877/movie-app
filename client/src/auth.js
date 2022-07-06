@@ -1,14 +1,14 @@
 import axios from 'axios'
 
-// const movieClient = axios.create({
-//     baseURL: 'https://localhost:4017',
-//     timeout: 1000,
-//     headers: {
-//         'Accept': 'application/vnd.GitHub.v3+json',
-//         //'Authorization': 'token <your-token-here> -- https://docs.GitHub.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
-//     }
-// });
-
+const appState = {
+    About: 'ABOUT',
+    Home: 'HOME',
+    Playlist: 'PLAYLIST',
+    Profile: 'PROFILE',
+    SignIn: 'SIGN_IN',
+    SignUp: 'SIGN_UP',
+    SignOut: 'SIGN_OUT',
+}
 
 export default () => {
 
@@ -16,13 +16,15 @@ export default () => {
         isLoggedIn: false,
         token: null,
         loading: false,
+        screen: appState.SignIn,
         user: {
-            username: 'gideon877',
-            password: 'password'
+            username: 'giddeon877',
+            password: 'password',
+            firstName: '',
+            lastName: '',
         },
+        authMessage: '',
         getUser() {
-            console.log(this.user, ' user');
-            
             return {
                 ...this.user,
                 token: this.token,
@@ -31,21 +33,28 @@ export default () => {
         },
         signIn() {
             this.loading = true;
-            this.getUser()
-            console.log(this.user);
+            this.getUser();
+            // this.authMessage = 'Verifying user account'
+            // console.log(this.user);
             axios
-                .post('http://localhost:4017/v1/signIn', {
-                    username: 'gideon877',
-                    password: 'password'
-                })
+                .post('http://localhost:4017/v1/signIn', this.user)
                 .then(r => r.data)
                 .then(data => {
                     const { movies, user, token } = data;
                     this.loading = false;
                     this.isLoggedIn = true;
+                    this.screen = appState.Home;
                     [this.user, this.playlist, this.token] = [user, movies, token];
+                    localStorage.setItem('user', JSON.stringify(user))
                 })
-                .catch(e => console.log({ e }))
+                .catch(e => {
+                    const { message } = e.response.data
+                    this.authMessage = message
+                    setTimeout(()=> {
+                        this.loading = false;
+                        this.authMessage = ''
+                    }, 4000)
+                })
 
         },
 
@@ -53,15 +62,16 @@ export default () => {
             this.token = null;
             this.user = null;
             this.isLoggedIn = false;
-
+            localStorage.clear()
             // API
-
             setTimeout(() => {
+                this.screen = appState.SignIn
                 this.loading = false;
             }, 2000)
         },
 
         signUp() {
+            alert('sign up')
             // check user input
             // call API
             // display results
