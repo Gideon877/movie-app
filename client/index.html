@@ -31,7 +31,7 @@
     <div class="ui large top fixed hidden menu">
         <div class="ui container">
             <a class="active item">Home</a>
-            <a x-show="isLoggedIn" class="item">Playlist <a class="red ribbon label">pp</a></a>
+            <a x-show="isLoggedIn" class="item">Playlist</a>
             <a x-show="isLoggedIn" class="item">About</a>
             <a x-show="isLoggedIn" class="item">Profile</a>
             <div x-show="isLoggedIn" class="right item">
@@ -61,7 +61,7 @@
 
 
     <!-- Page Contents -->
-    <div class="pusher">
+    <div class="pusher" x-transition>
         <!-- Page header with search -->
         <div class="ui inverted vertical masthead center aligned segment">
 
@@ -70,10 +70,10 @@
                     <a class="toc item">
                         <i class="sidebar icon"></i>
                     </a>
-                    <a class="active item">Home</a>
-                    <a x-show="isLoggedIn" class="item">Playlist</a>
-                    <a x-show="isLoggedIn" class="item">About</a>
-                    <a x-show="isLoggedIn" class="item">Profile</a>
+                    <a :class="`${screen == 'HOME' ? 'active' : ''} item`" @click="changeScreen('HOME')">Home</a>
+                    <a x-show="isLoggedIn" @click="changeScreen('PLAYLIST')" :class="`${screen == 'PLAYLIST' ? 'active' : ''} item`">Playlist</a>
+                    <!-- <a x-show="isLoggedIn" @click="changeScreen('ABOUT')" :class="`${screen == 'ABOUT' ? 'active' : ''} item`">About</a> -->
+                    <a x-show="isLoggedIn" @click="changeScreen('PROFILE')" :class="`${screen == 'PROFILE' ? 'active' : ''} item`">Profile</a>
                     <div x-show="isLoggedIn" class="right item">
                         <a @click="signOut" class="ui inverted button">Logout</a>
                     </div>
@@ -91,21 +91,21 @@
                     <i class="search icon"></i>
                 </div>
             </div>
-
+            
             <h2 x-show="isLoggedIn" class="ui center aligned icon header">
-                <i class="circular film icon"></i>
-                <span
-                    x-text="`${resultHeader == 'POPULAR' ? 'Popular Movies' : `Search Results for : ${search.text}`}`"></span>
-                <div class="ui label" x-text="movies.length"></div>
+                <i :class="`circular ${screenIcon} icon`"></i>
+                <span x-show="screen == 'HOME'" x-text="'Entertainment'"></span>
+                <span x-show="screen == 'PLAYLIST'" x-text="'Favorite Movies'"></span>
+                <span x-show="screen == 'PROFILE'" x-text="user.username"></span>
             </h2>
 
         </div>
 
 
-        <!-- Search result card display -->
+        <!-- Search result card display Movies -->
         <div :class="`ui vertical ${loading ? 'loading' : ''} right aligned segment`" x-show="isLoggedIn">
 
-            <div class="ui link cards" style="padding: 1em;">
+            <div x-show="screen == 'HOME' || screen == 'PLAYLIST'" class="ui link cards" style="padding: 1em;">
                 <div x-show="search.showErrorMessage" class="ui icon message">
                     <i class="notched circle loading icon"></i>
                     <div class="content">
@@ -115,13 +115,6 @@
                         <p>No Movies found for <span x-text="search.text"></span> </p>
                     </div>
                 </div>
-                <span>
-                    <template x-for="film in playlist">
-                        <div>
-                            <li x-text="film.title"></li>
-                        </div>
-                    </template>
-                </span>
                 <template x-for="film in movies">
                     <!-- <div class="column"> -->
                     <div class="right teal card">
@@ -349,7 +342,9 @@
                         <div class="header">
                             Welcome to our site!
                         </div>
-                        <p x-text="authMessage.length == 0 ? 'Fill out the form below to sign-in for an existing account' : authMessage"></p>
+                        <p
+                            x-text="authMessage.length == 0 ? 'Fill out the form below to sign-in for an existing account' : authMessage">
+                        </p>
                     </div>
                     <br>
                     <div class="field">
@@ -373,16 +368,27 @@
                     </div>
                     <div class="ui error message"></div>
 
-                    <div>
-                        <!-- <span x-text="JSON.stringify(user)"></span> -->
-                    </div>
-
                 </div>
             </div>
             <br>
             <br>
             <br>
             <br>
+        </div>
+
+
+
+        <!-- About -->
+        <div x-show="screen == 'ABOUT'">
+        
+            <h5>ABOUT component</h5>
+        </div>
+        
+        
+        <!-- Profile -->
+        <div x-show="screen == 'PROFILE'">
+            
+            <!-- <h5>Profile component</h5> -->
         </div>
 
 
@@ -417,7 +423,7 @@
     </div>
 
 
-    <script type="module" src="/main.js"></script>
+    <script type="module" src="./main.js"></script>
 </body>
 
 </html>

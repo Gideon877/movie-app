@@ -62,7 +62,7 @@ export default () => {
             this.token = null;
             this.user = null;
             this.isLoggedIn = false;
-            localStorage.clear()
+            localStorage.clear();
             // API
             setTimeout(() => {
                 this.screen = appState.SignIn

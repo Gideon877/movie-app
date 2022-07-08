@@ -2,7 +2,7 @@ import _ from 'lodash'
 import moment from 'moment';
 import Auth from './auth.js';
 import Handler from './handler.js';
-import { POPULAR_URL, SearchState, URL } from './constants';
+import { POPULAR_URL, SearchState, URL, appState } from './constants';
 const auth = Auth();
 
 
@@ -14,13 +14,14 @@ export default () => {
         token: Alpine.$persist(0),
         time: Alpine.$persist(0),
         header: 'Dintshwantsho',
+        screenIcon: 'film',
         search: {
             isLoading: false,
             text: '',
             showErrorMessage: false
         },
         movies: [],
-        playlist: [],
+        playlist: Alpine.$persist([]),
         page: 0,
         pages: 0,
         results: 0,
@@ -35,11 +36,6 @@ export default () => {
         },
         init() {
             this.loading = true
-            setInterval(() => {
-                this.time = moment().format('MMMM Do YYYY, h:mm:ss a');
-                this.count++;                
-            }, 1000);
-
             setTimeout(() => {
                 this.user = auth.getUser();
                 this.getMovies(POPULAR_URL);
@@ -49,6 +45,7 @@ export default () => {
 
             if(this.token !== 0 && this.token !== null) {
                 this.isLoggedIn = true;
+                this.screen = appState.Home
             }
 
 
@@ -59,7 +56,14 @@ export default () => {
         onSearch() {
             this.search.isLoading = true;
             _.isEmpty(this.search.text) ? this.getMovies(POPULAR_URL) : this.getMovies(this.searchUrl());
+
+            if(this.screen == appState.Playlist) {
+                
+            }
             // console.log('typing...', _.size(this.search.text));
+        },
+        userLikedMovies(){
+            alert('Liked movies')
         },
         getMovies(url) {
             console.log(url);
@@ -86,7 +90,25 @@ export default () => {
                 })
                 .catch(err => console.error(err));
             setTimeout(() => this.search.isLoading = false, 1000);
-        }
+        },
+        changeScreen(current){
+            // alert(current)
+            this.screen = current;
+            if(current == appState.Playlist) {
+                console.log(this.playlist);
+                this.screenIcon = 'list'
+                this.movies = this.playlist;
+            }
+
+            if (current == appState.Profile) {
+                this.screenIcon = 'user'
+            }
+            
+            if(current == appState.Home) {
+                this.screenIcon = 'home'
+                this.getMovies(POPULAR_URL);
+            }
+        },
     }
 
 }

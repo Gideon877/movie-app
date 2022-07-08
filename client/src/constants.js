@@ -19,6 +19,17 @@ const Pages = {
     More: 'MORE',
 }
 
+const appState = {
+    About: 'ABOUT',
+    Home: 'HOME',
+    Playlist: 'PLAYLIST',
+    Profile: 'PROFILE',
+    SignIn: 'SIGN_IN',
+    SignUp: 'SIGN_UP',
+    SignOut: 'SIGN_OUT',
+}
+
+
 class User {
 
     constructor(username, password) {
@@ -27,12 +38,10 @@ class User {
         this.isLoggedIn = false;
     }
 
-    
-
 }
 
 
 
 export {
-    URL, POPULAR_URL, SearchState, Pages, User, queryForDetails
+    URL, POPULAR_URL, SearchState, Pages, User, queryForDetails, appState
 }
